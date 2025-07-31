@@ -1,0 +1,38 @@
+nameOverride: ""
+fullnameOverride: ""
+
+spec:
+  project: default
+  source:
+    repoURL: https://kubernetes-sigs.github.io/external-dns/
+    targetRevision: 1.14.2
+    chart: external-dns
+    helm:
+      values: |
+        provider: aws
+        domainFilters:
+          - "vesk18.devops7.test-danit.com"
+        txtOwnerId: "vesk18"
+        registry: "txt"
+        policy: sync
+        logLevel: debug
+        serviceAccount:
+          create: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: external-dns
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+server:
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+      - argocd.vesk18.devops7.test-danit.com
+
+configs:
+  params:
+    server.insecure: true
